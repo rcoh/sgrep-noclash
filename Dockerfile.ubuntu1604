@@ -1,0 +1,80 @@
+## sgrep build
+
+# FROM ocaml/opam2:ubuntu-16.04 as build-sgrep
+# USER root
+# RUN apt-get -qqy update && \
+# 	apt-get install -qqy --no-install-recommends \
+# 	perl \
+# 	pkg-config \
+# 	m4 && \
+# 	apt-get clean && \
+# 	rm -rf /var/lib/apt/lists/*
+
+# USER opam
+
+# WORKDIR /home/opam/opam-repository
+# RUN git pull && opam update && opam switch 4.07 && opam install ocamlfind camlp4 num ocamlgraph json-wheel conf-perl dune yaml grain_dypgen menhir
+
+# COPY --chown=opam . /home/opam/sgrep/
+# WORKDIR /home/opam/sgrep
+
+# RUN git submodule update --init --recursive
+# RUN eval $(opam env) && cd pfff && ./configure && make depend && make && make opt && make install-libs
+# RUN eval $(opam env) && cd sgrep && make all
+# RUN sgrep/_build/default/bin/main_sgrep.exe -version
+
+## sgrep lint build
+
+FROM ubuntu:16.04 as build-sgrep-lint
+RUN apt-get -qqy update && \
+	apt-get install -qqy --no-install-recommends \
+	make m4 perl wget swi-prolog mercurial pkg-config build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libbz2-dev ca-certificates git && \
+	apt-get clean && \
+	rm -rf /var/lib/apt/lists/*
+
+# Install Python 3.7
+RUN wget https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tar.xz
+RUN tar xvf Python-3.7.7.tar.xz
+WORKDIR Python-3.7.7
+RUN ./configure --enable-shared
+RUN make altinstall
+# Add to library search path
+RUN ldconfig /usr/local/lib
+RUN python3.7 --version
+
+# Install pip3
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN python3.7 get-pip.py
+RUN pip3 --version
+
+WORKDIR /
+COPY sgrep_lint /home/pythonbuild/sgrep_lint/
+WORKDIR /home/pythonbuild/sgrep_lint
+RUN make all
+RUN ls -al /home/pythonbuild/sgrep_lint/build/sgrep.dist/
+RUN /home/pythonbuild/sgrep_lint/build/sgrep.dist/sgrep-lint --help
+
+## final output, combining both
+
+# FROM python:3.7.7-alpine3.11
+# LABEL maintainer="sgrep@r2c.dev"
+
+# ENV PYTHONUNBUFFERED=1
+
+# COPY --from=build-sgrep-lint /home/pythonbuild/sgrep_lint/build/sgrep.dist/* /bin/sgrep-lint-files/
+# RUN ln -s /bin/sgrep-lint-files/sgrep-lint /bin/sgrep-lint
+
+# RUN ls -al  /bin/sgrep-lint-files/cacert.pem
+# RUN mkdir /bin/sgrep-lint-files/certifi/
+# RUN ln -sfn /bin/sgrep-lint-files/cacert.pem  /bin/sgrep-lint-files/certifi/cacert.pem
+# RUN ls -al /bin/sgrep-lint-files/
+
+# RUN sgrep-lint --help
+# COPY --from=build-sgrep /home/opam/sgrep/sgrep/_build/default/bin/main_sgrep.exe /bin/sgrep
+# RUN sgrep --help
+# RUN sgrep-lint --config=r2c /bin/sgrep-lint-files/
+
+
+# ENV SGREP_IN_DOCKER=1
+# ENV PYTHONIOENCODING=utf8
+# ENTRYPOINT [ "/bin/sgrep-lint" ]
