@@ -13,8 +13,8 @@ cd "${THIS_DIR}"
 #   File "/home/pythonbuild/sgrep_lint/build/sgrep.dist/subprocess.py", line 152, in <module>
 # ImportError: /home/pythonbuild/sgrep_lint/build/sgrep.dist/_posixsubprocess.so: undefined symbol: PyTuple_Type
 
-wget "http://nuitka.net/releases/Nuitka-0.6.8rc5.tar.gz"
-pip3 install Nuitka-0.6.8rc5.tar.gz
+# wget "http://nuitka.net/releases/Nuitka-0.6.8rc5.tar.gz"
+# pip3 install Nuitka-0.6.8rc5.tar.gz
 
 
 # If we use Nuitka 0.6.7 we get this error:
@@ -24,7 +24,7 @@ pip3 install Nuitka-0.6.8rc5.tar.gz
 # collect2: error: ld returned 1 exit status
 # scons: *** [/home/pythonbuild/sgrep_lint/build/sgrep.dist/sgrep] Error 1
 
-# pip3 install Nuitka==0.6.7
+pip3 install Nuitka==0.6.7
 
 
 pip3 install -r requirements.txt
