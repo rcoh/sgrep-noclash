@@ -26,6 +26,9 @@ jobs:
         with:
           name: sgrep-osx-${{ github.sha }}
           path: sgrep-osx
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: help
         run: |
           pwd;
@@ -38,8 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: sgrep-osx/artifacts.zip
-          asset_name: sgrep-osx-${{ github.ref }}.zip
+          asset_path: ./sgrep-osx/artifacts.zip
+          asset_name: sgrep-osx-${{ steps.get_version.outputs.VERSION }}.zip
           asset_content_type: application/zip
       - uses: actions/download-artifact@v1
         with:
@@ -53,7 +56,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./sgrep-ubuntu/artifacts.tar.gz
-          asset_name: sgrep-ubuntu-${{ github.ref }}.tar.gz
+          asset_name: sgrep-ubuntu-1604-${{ steps.get_version.outputs.VERSION }}.tar.gz
           asset_content_type: application/gzip
   release-osx:
     name: Build the OSX binaries
