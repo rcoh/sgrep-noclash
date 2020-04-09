@@ -78,9 +78,9 @@ jobs:
       #  run: eval $(opam env) && opam install -y ./pfff
       #- name: Install and test sgrep
       #  run: eval $(opam env) && cd sgrep && make all && make test && make install
-      #- name: Prepare artifacts
-      #  run: |
-      #    mkdir -p artifacts/bin/sgrep-lint-files
+      - name: Prepare artifacts
+        run: |
+          mkdir -p artifacts/bin/sgrep-lint-files
       #    cp ./sgrep/_build/default/bin/main_sgrep.exe artifacts/sgrep
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
