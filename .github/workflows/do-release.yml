@@ -32,7 +32,7 @@ jobs:
           ls;
           find .;
       - name: Upload Release Asset
-        id: upload-release-asset 
+        id: upload-release-asset-osx 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
           name: sgrep-ubuntu-16.04-${{ github.sha }}
           path: sgrep-ubuntu.tar.gz
       - name: Upload Release Asset
-        id: upload-release-asset 
+        id: upload-release-asset-ubuntu
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
