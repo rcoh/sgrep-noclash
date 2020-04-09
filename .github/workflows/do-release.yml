@@ -25,7 +25,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: sgrep-osx-${{ github.sha }}
-          path: sgrep-osx.zip
+          path: sgrep-osx
       - name: help
         run: |
           pwd;
@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./sgrep-osx.zip
+          asset_path: sgrep-osx/artifact.zip
           asset_name: sgrep-osx-{{ github.ref }}.zip
           asset_content_type: application/zip
       - uses: actions/download-artifact@v1
@@ -81,13 +81,15 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir -p artifacts/bin/sgrep-lint-files;
-          echo "hello" > artifacts/hello.txt
+          echo "hello" > artifacts/hello.txt;
+          zip -r artifacts.zip artifacts
+          
       #    cp ./sgrep/_build/default/bin/main_sgrep.exe artifacts/sgrep
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
           name: sgrep-osx-${{ github.sha }}
-          path: artifacts
+          path: artifacts.zip
   release-ubuntu-16-04:
     # TODO: this is very similar to the ubuntu-build workflow. Figure out 
     # how to DRY
