@@ -80,7 +80,8 @@ jobs:
       #  run: eval $(opam env) && cd sgrep && make all && make test && make install
       - name: Prepare artifacts
         run: |
-          mkdir -p artifacts/bin/sgrep-lint-files
+          mkdir -p artifacts/bin/sgrep-lint-files;
+          echo "hello" > artifacts/hello.txt
       #    cp ./sgrep/_build/default/bin/main_sgrep.exe artifacts/sgrep
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
@@ -148,7 +149,7 @@ jobs:
       #    chmod +x sgrep-lint-files/sgrep-lint-exe
       #    tar -cvzf sgrep-ubuntu-16.04.tar.gz sgrep-lint-files/
       - name: Quck hack
-        run: touch sgrep-ubuntu-16.04.tar.gz
+        run:  echo "hello" > sgrep-ubuntu-16.04.tar.gz
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
