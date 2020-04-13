@@ -20,10 +20,9 @@ echo "Looking for OSX binary"
 cat release.json | jq '.assets[].name' | grep "sgrep-$(cat version)-osx.zip"
 
 echo "Validating Ubuntu checksum"
-SHA_URL=$(cat release.json | jq -r '.assets[].browser_download_url' | grep "sha256" | grep "16.04")
-RELEASE_URL=$(cat release.json | jq -r '.assets[].browser_download_url' | grep -v "sha256" | grep "16.04")
+SHA_URL="$(cat release.json | jq -r '.assets[].browser_download_url' | grep "sha256" | grep "16.04")"
+RELEASE_URL="$(cat release.json | jq -r '.assets[].browser_download_url' | grep -v "sha256" | grep "16.04")"
 
-EXPECTED_SHA=$(curl -L $SHA_URL | awk '{ print $1 }')
+EXPECTED_SHA="$(curl -L $SHA_URL | awk '{ print $1 }')"
 
-curl -L $RELEASE_URL | sha256sum | grep $EXPECTED_SHA
-
+curl -L "$RELEASE_URL" | sha256sum | grep "$EXPECTED_SHA"

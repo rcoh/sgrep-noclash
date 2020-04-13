@@ -20,5 +20,3 @@ echo "OK!"
 echo -n "Validating brew the version ($(cat semgrep-version) vs. $(cat release-version))..."
 diff semgrep-version release-version
 echo "OK!"
-
-
