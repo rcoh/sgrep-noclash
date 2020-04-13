@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Validate the release
-        run: VERSION={{ steps.get_version.ouputs.VERSION }} ./release-scripts/validate-release.sh
+        run: VERSION=${{ steps.get_version.ouputs.VERSION }} ./release-scripts/validate-release.sh
   verify_osx_release:
     name: Verify the OSX brew package
     runs-on: macos-latest
@@ -32,4 +32,4 @@ jobs:
       - name: Install JQ
         run: brew install jq
       - name: Validate the release
-        run: VERSION={{ steps.get_version.ouputs.VERSION }} ./release-scripts/validate-osx-release.sh
+        run: VERSION=${{ steps.get_version.ouputs.VERSION }} ./release-scripts/validate-osx-release.sh
