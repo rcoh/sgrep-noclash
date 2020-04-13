@@ -23,6 +23,8 @@ echo "Validating Ubuntu checksum"
 SHA_URL="$(cat release.json | jq -r '.assets[].browser_download_url' | grep "sha256" | grep "16.04")"
 RELEASE_URL="$(cat release.json | jq -r '.assets[].browser_download_url' | grep -v "sha256" | grep "16.04")"
 
-EXPECTED_SHA="$(curl -L $SHA_URL | awk '{ print $1 }')"
+curl -L "$SHA_URL" | awk '{ print $1 }' > expected_sha
 
-curl -L "$RELEASE_URL" | sha256sum | grep "$EXPECTED_SHA"
+curl -L "$RELEASE_URL" | sha256sum | awk '{ print $1 }' > actual_sha
+
+diff -w expected_sha actual_sha
