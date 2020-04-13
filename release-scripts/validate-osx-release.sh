@@ -7,6 +7,10 @@ brew install semgrep
 
 echo "Running homebrew recipe checks"
 brew test semgrep
+echo "whyyyy...."
+curl https://api.github.com/repos/returntocorp/sgrep/releases/latest
+
+curl https://api.github.com/repos/returntocorp/sgrep/releases/latest  | jq
 
 curl https://api.github.com/repos/returntocorp/sgrep/releases/latest | jq -r '.tag_name' | sed 's/^v//' > version
 echo "Release version: $(cat version)"
