@@ -7,9 +7,8 @@ brew install semgrep
 
 echo "Running homebrew recipe checks"
 brew test semgrep
-echo "from env, $VERSION"
+echo "from file, $(cat version)"
 
-echo "$VERSION" > version
 
 brew info semgrep --json | jq -r '.[0].installed[0].version' | tee brew-version
 

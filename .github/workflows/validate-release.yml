@@ -18,6 +18,8 @@ jobs:
         run: sudo apt-get update && sudo apt install -y jq
       - name: Checkout
         uses: actions/checkout@v2
+      - name: write to a file
+        run: echo "${{ steps.get_version.outputs.VERSION }}" | tee version
       - name: Validate the release
         run: VERSION=${{ steps.get_version.ouputs.VERSION }} ./release-scripts/validate-release.sh
   verify_osx_release:
@@ -29,6 +31,8 @@ jobs:
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: write to a file
+        run: echo "${{ steps.get_version.outputs.VERSION }}" | tee version
       - name: Install JQ
         run: brew install jq
       - name: Validate the release
